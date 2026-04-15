@@ -53,46 +53,7 @@
   z-index: 10;
 }</style>
 </head>
-<script>
-const frameCount = 293;
-const canvas = document.getElementById("scroll-canvas");
-const context = canvas.getContext("2d");
-
-const currentFrame = (index) =>
-  `frames/ezgif-frame-${String(index).padStart(3, '0')}.jpg`;
-
-const images = [];
-const image = new Image();
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-for (let i = 1; i <= frameCount; i++) {
-  const img = new Image();
-  img.src = currentFrame(i);
-  images.push(img);
-}
-
-image.src = currentFrame(1);
-image.onload = function () {
-  context.drawImage(image, 0, 0, canvas.width, canvas.height);
-};
-
-window.addEventListener("scroll", () => {
-  const scrollTop = document.documentElement.scrollTop;
-  const maxScrollTop =
-    document.documentElement.scrollHeight - window.innerHeight;
-
-  const frameIndex = Math.min(
-    frameCount - 1,
-    Math.floor((scrollTop / maxScrollTop) * frameCount)
-  );
-
-  requestAnimationFrame(() => {
-    context.drawImage(images[frameIndex], 0, 0, canvas.width, canvas.height);
-  });
-});
-</script><body class="bg-kromah-stone text-kromah-black antialiased selection:bg-kromah-black selection:text-white">
+<body class="bg-kromah-stone text-kromah-black antialiased selection:bg-kromah-black selection:text-white">
 <canvas id="scroll-canvas"></canvas>
   <!-- Header -->
   <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b bg-transparent border-transparent py-6">
@@ -458,8 +419,7 @@ window.addEventListener("scroll", () => {
       }, 1000);
     }
   </script>
-</body>
-</html>
+
 <script>
 const frameCount = 293;
 const canvas = document.getElementById("scroll-canvas");
