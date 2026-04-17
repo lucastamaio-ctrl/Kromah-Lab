@@ -1,411 +1,449 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kromah Lab | Clinical Color Science</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              serif: ['Playfair Display', 'serif'],
-              mono: ['JetBrains Mono', 'monospace'],
-            },
-            colors: {
-              'kromah-black': '#121212',
-              'kromah-charcoal': '#1E1E1E',
-              'kromah-stone': '#F5F5F3',
-              'kromah-gray': '#8E8E8E',
-              'kromah-silver': '#D4D4D4',
-            }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kromah Lab | Clinical Color Science</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            'kromah-black': '#121212',
+            'kromah-charcoal': '#1E1E1E',
+            'kromah-stone': '#F5F5F3',
+            'kromah-gray': '#8E8E8E',
+            'kromah-silver': '#D4D4D4',
           }
         }
       }
-    </script>
-    <style>
-      html { scroll-behavior: smooth; }
-      ::-webkit-scrollbar { width: 6px; }
-      ::-webkit-scrollbar-track { background: #F5F5F3; }
-      ::-webkit-scrollbar-thumb { background: #D4D4D4; }
-      ::-webkit-scrollbar-thumb:hover { background: #8E8E8E; }
-      .animate-bounce { animation: bounce 1s infinite; }
-      @keyframes bounce {
-        0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8,0,1,1); }
-        50% { transform: none; animation-timing-function: cubic-bezier(0,0,0.2,1); }
+    }
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { margin: 0; }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #F5F5F3; }
+    ::-webkit-scrollbar-thumb { background: #D4D4D4; }
+    ::-webkit-scrollbar-thumb:hover { background: #8E8E8E; }
+
+    .animate-bounce { animation: bounce 1s infinite; }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8,0,1,1); }
+      50% { transform: none; animation-timing-function: cubic-bezier(0,0,0.2,1); }
+    }
+
+    #scroll-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      display: block;
+      pointer-events: none;
+      background: #F5F5F3;
+    }
+
+    .scroll-story {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .story-panel {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: min(680px, 46vw);
+      padding: 42px 44px;
+      border: 1px solid rgba(255,255,255,0.28);
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(24px) saturate(140%);
+      -webkit-backdrop-filter: blur(24px) saturate(140%);
+      box-shadow: 0 18px 48px rgba(0,0,0,0.12);
+      opacity: 0;
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .story-panel.active {
+      opacity: 1;
+    }
+
+    .story-panel.left {
+      left: 6%;
+    }
+
+    .story-panel.right {
+      right: 6%;
+    }
+
+    .story-label {
+      display: block;
+      margin-bottom: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(18,18,18,0.62);
+    }
+
+    .story-title {
+      margin: 0 0 14px 0;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(50px, 5vw, 74px);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      color: #121212;
+    }
+
+    .story-title em {
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .story-copy {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(18px, 1.4vw, 28px);
+      line-height: 1.5;
+      font-weight: 300;
+      color: rgba(18,18,18,0.72);
+      max-width: 24ch;
+    }
+
+    .site-shell {
+      position: relative;
+      z-index: 30;
+    }
+
+    .intro-spacer {
+      height: 420vh;
+      position: relative;
+    }
+
+    .intro-fade-bottom {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 200px;
+      background: linear-gradient(to bottom, rgba(245,245,243,0), rgba(245,245,243,1));
+      pointer-events: none;
+    }
+
+    .content-surface {
+      position: relative;
+      background: #F5F5F3;
+    }
+
+    @media (max-width: 900px) {
+      .story-panel {
+        width: calc(100% - 48px);
+        left: 24px !important;
+        right: 24px !important;
+        top: auto;
+        bottom: 8%;
+        transform: none;
+        padding: 24px;
       }
-    body {
-  margin: 0;
-  height: 300vh;
-}
 
-#scroll-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
+      .story-title {
+        font-size: clamp(34px, 8vw, 52px);
+        line-height: 1;
+      }
 
-.hero-glass {
-  position: absolute;
-  inset: 0;
-  backdrop-filter: blur(18px);
-  background: rgba(255, 255, 255, 0.10);
-  z-index: 5;
-}
-
-.scroll-story {
-  position: fixed;
-  inset: 0;
-  z-index: 15;
-  pointer-events: none;
-}
-
-.story-panel {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: min(520px, 38vw);
-  padding: 32px 34px;
-  border: 1px solid rgba(255,255,255,0.22);
-  background: rgba(255,255,255,0.14);
-  backdrop-filter: blur(24px) saturate(140%);
-  -webkit-backdrop-filter: blur(24px) saturate(140%);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.10);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.story-panel.active {
-  opacity: 1;
-}
-
-.story-panel.left {
-  left: 6%;
-}
-
-.story-panel.right {
-  right: 6%;
-}
-        </style>
+      .story-copy {
+        font-size: 17px;
+        max-width: none;
+      }
+    }
+  </style>
 </head>
 <body class="bg-kromah-stone text-kromah-black antialiased selection:bg-kromah-black selection:text-white">
-<canvas id="scroll-canvas"></canvas>
-        <div class="scroll-story">
-  <div id="panel-1" class="story-panel left active">
-    <span class="story-label">Kromah Lab</span>
-    <h2 class="story-title">The Science<br><em>of Dark Fiber</em></h2>
-    <p class="story-copy">
-      Precision color methodology engineered for high-melanin, dark resistant hair.
-    </p>
-  </div>
 
-  <div id="panel-2" class="story-panel right">
-    <span class="story-label">Cuticle Architecture</span>
-    <h2 class="story-title">Surface<br><em>Intelligence</em></h2>
-    <p class="story-copy">
-      The outer structure controls reflection, tactility, and the first layer of fiber protection.
-    </p>
-  </div>
+  <canvas id="scroll-canvas"></canvas>
 
-  <div id="panel-3" class="story-panel left">
-    <span class="story-label">Cortex & Melanin</span>
-    <h2 class="story-title">The Core of<br><em>Transformation</em></h2>
-    <p class="story-copy">
-      Inside the fiber, pigment density and internal organization determine lift, tone, and long-term integrity.
-    </p>
-  </div>
-
-  <div id="panel-4" class="story-panel right">
-    <span class="story-label">Keratin Structure</span>
-    <h2 class="story-title">Molecular<br><em>Precision</em></h2>
-    <p class="story-copy">
-      Protein geometry, bond behavior, and structural order define the language of healthy hair.
-    </p>
-  </div>
-</div>
-  <!-- Header -->
-  <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b bg-transparent border-transparent py-6">
-    <div class="max-w-[1400px] mx-auto px-6 md:px-12 flex justify-between items-center">
-      <div class="flex items-center gap-2 cursor-pointer z-50" onclick="window.scrollTo(0, 0)">
-        <div class="w-3 h-3 bg-kromah-black rotate-45"></div>
-        <span class="text-lg tracking-[0.2em] font-bold uppercase font-sans">Kromah Lab</span>
-      </div>
-
-      <nav class="hidden md:flex items-center gap-12">
-       <button onclick="scrollToSection('about')" class="text-xs font-medium uppercase tracking-widest text-zinc-600 hover:text-kromah-black transition-colors">About</button>
-
-<button onclick="scrollToSection('methodology')" class="text-xs font-medium uppercase tracking-widest text-zinc-600 hover:text-kromah-black transition-colors">Methodology</button>
-
-<button onclick="scrollToSection('seminars')" class="text-xs font-medium uppercase tracking-widest text-zinc-600 hover:text-kromah-black transition-colors">Seminars</button>
-
-<button onclick="scrollToSection('contact')" class="text-xs font-medium uppercase tracking-widest text-zinc-600 hover:text-kromah-black transition-colors">Contact</button>
-       
-      </nav>
-
-      <button class="md:hidden z-50" onclick="toggleMobileMenu()">
-        <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-        <svg id="close-icon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-      </button>
-
-      <div id="mobile-menu" class="fixed inset-0 bg-kromah-stone z-40 flex flex-col items-center justify-center gap-8 transition-transform duration-500 ease-in-out translate-x-full">
-        <button onclick="scrollToSection('about')" class="text-2xl font-serif italic text-kromah-black">About</button>
-
-<button onclick="scrollToSection('Methodology')" class="text-2xl font-serif italic text-kromah-black">Methodology</button>
-
-<button onclick="scrollToSection('Seminars')" class="text-2xl font-serif italic text-kromah-black">Seminars</button>
-
-<button onclick="scrollToSection('Contact')" class="text-2xl font-serif italic text-kromah-black">Contact</button>
-       
-      </div>
+  <!-- STORY PANELS START -->
+  <div class="scroll-story">
+    <div id="panel-1" class="story-panel left active">
+      <span class="story-label">Kromah Lab</span>
+      <h2 class="story-title">The Science<br><em>of Dark Fiber</em></h2>
+      <p class="story-copy">
+        Precision color methodology engineered for high-melanin, dark resistant hair.
+      </p>
     </div>
-  </header>
 
-  <main>
-    <!-- Hero -->
-    <section class="relative min-h-screen pt-32 pb-20 px-6 md:px-12 max-w-[1400px] mx-auto flex flex-col justify-center">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 h-full items-center">
-          <div class="hero-glass"></div>
-        <div class="lg:col-span-7 z-10 flex flex-col gap-8">
-         
-          <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif leading-[0.9] text-kromah-black tracking-tight">
-            The Science <br />
-            <span class="italic font-light">of Dark Fiber</span>
-          </h1>
-          <p class="max-w-xl text-lg md:text-xl text-zinc-600 font-light leading-relaxed">
-            Redefining lift and tone for high-melanin hair structures. 
-            We replace formulation guesswork with repeatable, chemistry-based methodologies engineered for resistance.
-          </p>
-          <div class="flex flex-wrap gap-4 pt-8">
-            <button onclick="scrollToSection('methodology')" class="inline-flex items-center justify-center px-8 py-3 text-sm font-medium tracking-widest uppercase transition-all duration-300 ease-out focus:outline-none bg-kromah-black text-white hover:bg-zinc-800 border border-transparent">
-              Discover The Methodology
-            </button>
-            <button onclick="scrollToSection('contact')" class="inline-flex items-center justify-center px-8 py-3 text-sm font-medium tracking-widest uppercase transition-all duration-300 ease-out focus:outline-none bg-transparent text-kromah-black border border-kromah-black hover:bg-kromah-black hover:text-white">
-              Consulting Inquiry
-            </button>
-          </div>
-        </div>
-        <div class="lg:col-span-5 relative h-[50vh] lg:h-[70vh] w-full">
-          <div class="absolute inset-0 bg-zinc-200 overflow-hidden">
-            <img src="https://picsum.photos/seed/hairscience/800/1200" alt="Microscopic fiber analysis" class="w-full h-full object-cover grayscale contrast-125 opacity-90 hover:scale-105 transition-transform duration-1000 ease-out" referrerpolicy="no-referrer" />
-            <div class="absolute inset-0 bg-gradient-to-t from-kromah-stone/50 to-transparent mix-blend-overlay"></div>
-          </div>
-          <div class="absolute bottom-6 left-6 bg-white/90 backdrop-blur p-4 border border-zinc-200 max-w-[200px]">
-            <p class="font-mono text-xs text-zinc-500 mb-1">MELANIN DENSITY</p>
-            <div class="h-px w-full bg-zinc-300 mb-2"></div>
-            <p class="font-sans text-sm font-semibold">High Concentration</p>
-            <p class="font-mono text-[10px] text-zinc-400 mt-1">Eumelanin &gt; 85%</p>
-          </div>
-        </div>
-      </div>
-      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-zinc-400"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
-      </div>
-    </section>
-
-    <!-- Methodology -->
-    <section id="methodology" class="py-32 bg-white relative">
-      <div class="max-w-[1400px] mx-auto px-6 md:px-12">
-        <div class="mb-24 grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
-          <div>
-            <span class="block text-xs font-mono uppercase tracking-widest text-zinc-400 mb-4">Our Approach</span>
-            <h2 class="text-4xl md:text-5xl font-serif">Liquid Hair <span class="italic text-zinc-400">Methodology</span></h2>
-          </div>
-          <div class="pb-2">
-            <p class="text-zinc-600 font-light leading-relaxed max-w-md">
-              A proprietary three-phase system designed to navigate the structural complexities of Asian and resistant hair types, ensuring predictable outcomes without compromising fiber elasticity.
-            </p>
-          </div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-zinc-200 border border-zinc-200">
-          <div class="bg-white p-12 hover:bg-zinc-50 transition-colors duration-500 group min-h-[400px] flex flex-col justify-between">
-            <div>
-              <span class="block text-6xl font-light text-zinc-200 mb-8 group-hover:text-zinc-900 transition-colors duration-500 font-serif">01</span>
-              <h3 class="text-xl font-medium mb-4 uppercase tracking-wide">Melanin Profiling</h3>
-              <p class="text-zinc-500 leading-relaxed font-light text-sm">Quantifying the density of Eumelanin and Pheomelanin to calculate precise oxidation requirements without compromising the cuticle layer.</p>
-            </div>
-            <div class="mt-8 pt-8 border-t border-zinc-100 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <span class="text-[10px] font-mono uppercase">Clinical Data</span>
-              <div class="h-[1px] w-12 bg-black"></div>
-            </div>
-          </div>
-          <div class="bg-white p-12 hover:bg-zinc-50 transition-colors duration-500 group min-h-[400px] flex flex-col justify-between">
-            <div>
-              <span class="block text-6xl font-light text-zinc-200 mb-8 group-hover:text-zinc-900 transition-colors duration-500 font-serif">02</span>
-              <h3 class="text-xl font-medium mb-4 uppercase tracking-wide">Controlled Lift</h3>
-              <p class="text-zinc-500 leading-relaxed font-light text-sm">Utilizing slow-oxidizing agents that maintain structural integrity while effectively dispersing pigment clusters in resistant Asian hair types.</p>
-            </div>
-            <div class="mt-8 pt-8 border-t border-zinc-100 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <span class="text-[10px] font-mono uppercase">Clinical Data</span>
-              <div class="h-[1px] w-12 bg-black"></div>
-            </div>
-          </div>
-          <div class="bg-white p-12 hover:bg-zinc-50 transition-colors duration-500 group min-h-[400px] flex flex-col justify-between">
-            <div>
-              <span class="block text-6xl font-light text-zinc-200 mb-8 group-hover:text-zinc-900 transition-colors duration-500 font-serif">03</span>
-              <h3 class="text-xl font-medium mb-4 uppercase tracking-wide">Liquid Hair Restoration</h3>
-              <p class="text-zinc-500 leading-relaxed font-light text-sm">Our proprietary post-process system that replenishes lost lipids and aligns the cuticle for a glass-like, hydrophobic finish.</p>
-            </div>
-            <div class="mt-8 pt-8 border-t border-zinc-100 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <span class="text-[10px] font-mono uppercase">Clinical Data</span>
-              <div class="h-[1px] w-12 bg-black"></div>
-            </div>
-          </div>
-        </div>
-        <div class="mt-32 w-full h-[400px] bg-zinc-900 relative overflow-hidden flex items-center justify-center">
-          <img src="https://picsum.photos/seed/chemistry/1600/600" alt="Chemical Reaction" class="absolute inset-0 w-full h-full object-cover opacity-40 grayscale mix-blend-overlay" referrerpolicy="no-referrer" />
-          <div class="z-10 text-center text-white px-4">
-            <p class="font-mono text-xs uppercase tracking-[0.3em] mb-4">The Standard of Purity</p>
-            <p class="font-serif text-3xl md:text-4xl italic max-w-2xl mx-auto leading-snug">"Precision is not an option; it is the only variable we control."</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Services -->
-    <section id="services" class="py-32 bg-kromah-stone border-b border-zinc-200">
-      <div class="max-w-[1400px] mx-auto px-6 md:px-12">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
-          <div class="lg:col-span-4 lg:sticky lg:top-32 h-fit">
-            <h2 class="text-4xl font-serif mb-6">Expertise & <br/><span class="italic text-zinc-500">Consultation</span></h2>
-            <p class="text-zinc-600 mb-8 font-light leading-relaxed">
-              We serve the entire ecosystem of professional hair color, from the chemists formulating the tubes to the artists applying them.
-            </p>
-            <button class="inline-flex items-center justify-center px-8 py-3 text-sm font-medium tracking-widest uppercase transition-all duration-300 ease-out focus:outline-none bg-transparent text-kromah-black border border-kromah-black hover:bg-kromah-black hover:text-white">Request Deck</button>
-          </div>
-          <div class="lg:col-span-8 flex flex-col gap-12">
-            <div class="group border-t border-zinc-300 pt-12 pb-4 transition-all hover:pl-4">
-              <div class="flex flex-col md:flex-row md:items-baseline gap-4 mb-4">
-                <h3 class="text-2xl font-medium">System Design & R&D</h3>
-                <div class="flex gap-2">
-                  <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Product Development</span>
-                  <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Chemical Analysis</span>
-                  <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Stress Testing</span>
-                </div>
-              </div>
-              <p class="text-zinc-600 font-light max-w-2xl leading-relaxed">We partner with manufacturers to engineer lifting and deposit systems specifically calibrated for high-melanin fiber structures, reducing formulation guesswork.</p>
-            </div>
-            <div class="group border-t border-zinc-300 pt-12 pb-4 transition-all hover:pl-4">
-              <div class="flex flex-col md:flex-row md:items-baseline gap-4 mb-4">
-                <h3 class="text-2xl font-medium">Advanced Education</h3>
-                <div class="flex gap-2">
-                  <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Certification</span>
-                  <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Workshops</span>
-                  <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Digital Library</span>
-                </div>
-              </div>
-              <p class="text-zinc-600 font-light max-w-2xl leading-relaxed">Mastery certification for elite stylists focusing on the Liquid Hair Methodology. Move beyond "watch and learn" to deep chemical comprehension.</p>
-            </div>
-            <div class="group border-t border-zinc-300 pt-12 pb-4 transition-all hover:pl-4">
-              <div class="flex flex-col md:flex-row md:items-baseline gap-4 mb-4">
-                <h3 class="text-2xl font-medium">Salon Consultancy</h3>
-                <div class="flex gap-2">
-                  <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Protocol Implementation</span>
-                  <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Staff Training</span>
-                  <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Efficiency Audit</span>
-                </div>
-              </div>
-              <p class="text-zinc-600 font-light max-w-2xl leading-relaxed">Operational integration of science-based color protocols to increase ticket value, retention, and result consistency across large teams.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer id="contact" class="bg-kromah-black text-white py-24">
-    <div class="max-w-[1400px] mx-auto px-6 md:px-12">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
-        <div class="col-span-1 lg:col-span-2">
-          <div class="flex items-center gap-2 mb-6">
-            <div class="w-3 h-3 bg-white rotate-45"></div>
-            <span class="text-xl tracking-[0.2em] font-bold uppercase font-sans">Kromah Lab</span>
-          </div>
-          <p class="text-zinc-400 font-light max-w-sm leading-relaxed">
-            Engineering the future of professional hair color for the global majority. 
-            Science-backed, integrity-first, innovation-driven.
-          </p>
-        </div>
-        <div>
-          <h4 class="text-xs font-mono uppercase tracking-widest text-zinc-500 mb-6">Inquiries</h4>
-          <ul class="space-y-4 text-sm font-light text-zinc-300">
-            <li><a href="#" class="hover:text-white transition-colors">Education Support</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Consulting Requests</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Press & Media</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="text-xs font-mono uppercase tracking-widest text-zinc-500 mb-6">Connect</h4>
-          <div class="flex gap-4">
-            <a href="#" class="w-10 h-10 border border-zinc-800 flex items-center justify-center hover:bg-white hover:text-black transition-all">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-            </a>
-            <a href="#" class="w-10 h-10 border border-zinc-800 flex items-center justify-center hover:bg-white hover:text-black transition-all">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
-            </a>
-            <a href="#" class="w-10 h-10 border border-zinc-800 flex items-center justify-center hover:bg-white hover:text-black transition-all">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-zinc-600 font-mono">
-        <p>© 2024 Kromah Lab. All rights reserved.</p>
-        <div class="flex gap-8 mt-4 md:mt-0">
-          <a href="#" class="hover:text-zinc-400">Privacy Policy</a>
-          <a href="#" class="hover:text-zinc-400">Terms of Service</a>
-        </div>
-      </div>
+    <div id="panel-2" class="story-panel right">
+      <span class="story-label">Cuticle Architecture</span>
+      <h2 class="story-title">Surface<br><em>Intelligence</em></h2>
+      <p class="story-copy">
+        The outer structure controls reflection, tactility, and the first layer of fiber protection.
+      </p>
     </div>
-  </footer>
 
-  <!-- AI Modal -->
-  <div id="ai-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 md:p-8">
-    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeAIModal()"></div>
-    <div class="relative bg-[#FDFCFB] w-full max-w-2xl h-[600px] shadow-2xl flex flex-col overflow-hidden border border-zinc-200">
-      <div class="flex items-center justify-between p-6 border-b border-zinc-100 bg-white">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 bg-zinc-900 flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>
-          </div>
-          <div>
-            <h3 class="font-sans font-bold text-sm uppercase tracking-wider">Lab Intelligence</h3>
-            <p class="text-[10px] text-zinc-400 font-mono uppercase">Offline Mode</p>
-          </div>
+    <div id="panel-3" class="story-panel left">
+      <span class="story-label">Cortex & Melanin</span>
+      <h2 class="story-title">The Core of<br><em>Transformation</em></h2>
+      <p class="story-copy">
+        Inside the fiber, pigment density and internal organization determine lift, tone, and long-term integrity.
+      </p>
+    </div>
+
+    <div id="panel-4" class="story-panel right">
+      <span class="story-label">Keratin Structure</span>
+      <h2 class="story-title">Molecular<br><em>Precision</em></h2>
+      <p class="story-copy">
+        Protein geometry, bond behavior, and structural order define the language of healthy hair.
+      </p>
+    </div>
+  </div>
+  <!-- STORY PANELS END -->
+
+  <div class="site-shell">
+    <!-- Header -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b bg-transparent border-transparent py-6">
+      <div class="max-w-[1400px] mx-auto px-6 md:px-12 flex justify-between items-center">
+        <div class="flex items-center gap-2 cursor-pointer z-50" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+          <div class="w-3 h-3 bg-kromah-black rotate-45"></div>
+          <span class="text-lg tracking-[0.2em] font-bold uppercase font-sans">Kromah Lab</span>
         </div>
-        <button onclick="closeAIModal()" class="p-2 hover:bg-zinc-100 rounded-full transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-zinc-500"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+
+        <!-- NAVIGATION START -->
+        <nav class="hidden md:flex items-center gap-12">
+          <button onclick="scrollToSection('about')" class="text-xs font-medium uppercase tracking-widest text-zinc-600 hover:text-kromah-black transition-colors">About</button>
+          <button onclick="scrollToSection('methodology')" class="text-xs font-medium uppercase tracking-widest text-zinc-600 hover:text-kromah-black transition-colors">Methodology</button>
+          <button onclick="scrollToSection('seminars')" class="text-xs font-medium uppercase tracking-widest text-zinc-600 hover:text-kromah-black transition-colors">Seminars</button>
+          <button onclick="scrollToSection('contact')" class="text-xs font-medium uppercase tracking-widest text-zinc-600 hover:text-kromah-black transition-colors">Contact</button>
+        </nav>
+        <!-- NAVIGATION END -->
+
+        <button class="md:hidden z-50" onclick="toggleMobileMenu()">
+          <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          <svg id="close-icon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>
+
+        <div id="mobile-menu" class="fixed inset-0 bg-kromah-stone z-40 flex flex-col items-center justify-center gap-8 transition-transform duration-500 ease-in-out translate-x-full">
+          <button onclick="scrollToSection('about')" class="text-2xl font-serif italic text-kromah-black">About</button>
+          <button onclick="scrollToSection('methodology')" class="text-2xl font-serif italic text-kromah-black">Methodology</button>
+          <button onclick="scrollToSection('seminars')" class="text-2xl font-serif italic text-kromah-black">Seminars</button>
+          <button onclick="scrollToSection('contact')" class="text-2xl font-serif italic text-kromah-black">Contact</button>
+        </div>
       </div>
-      <div id="chat-area" class="flex-1 overflow-y-auto p-6 space-y-6 bg-zinc-50/50">
-        <div class="flex justify-start">
-          <div class="max-w-[80%] p-4 rounded-sm text-sm leading-relaxed bg-white border border-zinc-200 text-zinc-700 shadow-sm">
-            <p class="mb-2 text-[10px] font-mono uppercase text-zinc-400">Kromah Scientist</p>
-            <div>Welcome to Kromah Lab Intelligence. I am currently in offline mode for this static demo.</div>
+    </header>
+
+    <main>
+      <!-- intro animation scroll area -->
+      <section id="intro" class="intro-spacer">
+        <div class="intro-fade-bottom"></div>
+      </section>
+
+      <div class="content-surface">
+        <!-- CONTENT SECTIONS START -->
+
+        <!-- About -->
+        <section id="about" class="py-24 md:py-32 border-b border-zinc-200">
+          <div class="max-w-[1400px] mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+              <div class="lg:col-span-4">
+                <p class="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500 mb-4">About Kromah Lab</p>
+                <h2 class="text-4xl md:text-5xl font-serif leading-tight">
+                  Where color artistry meets structural intelligence.
+                </h2>
+              </div>
+              <div class="lg:col-span-8">
+                <p class="text-lg md:text-xl text-zinc-700 font-light leading-relaxed max-w-3xl">
+                  Kromah Lab is a science-driven education and consulting platform focused on high-melanin, dark resistant hair. We translate advanced color theory, fiber behavior, and formulation logic into refined methodologies that help stylists, educators, and brands achieve more predictable lift, cleaner tone, and better long-term integrity.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Methodology -->
+        <section id="methodology" class="py-32 bg-white border-b border-zinc-200">
+          <div class="max-w-[1400px] mx-auto px-6 md:px-12">
+            <div class="mb-24 grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
+              <div>
+                <span class="block text-xs font-mono uppercase tracking-widest text-zinc-400 mb-4">Our Approach</span>
+                <h2 class="text-4xl md:text-5xl font-serif">Liquid Hair <span class="italic text-zinc-400">Methodology</span></h2>
+              </div>
+              <div class="pb-2">
+                <p class="text-zinc-600 font-light leading-relaxed max-w-md">
+                  A proprietary three-phase system designed to navigate the structural complexities of Asian and resistant hair types, ensuring predictable outcomes without compromising fiber elasticity.
+                </p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-zinc-200 border border-zinc-200">
+              <div class="bg-white p-12 hover:bg-zinc-50 transition-colors duration-500 group min-h-[400px] flex flex-col justify-between">
+                <div>
+                  <span class="block text-6xl font-light text-zinc-200 mb-8 group-hover:text-zinc-900 transition-colors duration-500 font-serif">01</span>
+                  <h3 class="text-xl font-medium mb-4 uppercase tracking-wide">Melanin Profiling</h3>
+                  <p class="text-zinc-500 leading-relaxed font-light text-sm">Quantifying the density of Eumelanin and Pheomelanin to calculate precise oxidation requirements without compromising the cuticle layer.</p>
+                </div>
+                <div class="mt-8 pt-8 border-t border-zinc-100 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <span class="text-[10px] font-mono uppercase">Clinical Data</span>
+                  <div class="h-[1px] w-12 bg-black"></div>
+                </div>
+              </div>
+
+              <div class="bg-white p-12 hover:bg-zinc-50 transition-colors duration-500 group min-h-[400px] flex flex-col justify-between">
+                <div>
+                  <span class="block text-6xl font-light text-zinc-200 mb-8 group-hover:text-zinc-900 transition-colors duration-500 font-serif">02</span>
+                  <h3 class="text-xl font-medium mb-4 uppercase tracking-wide">Controlled Lift</h3>
+                  <p class="text-zinc-500 leading-relaxed font-light text-sm">Utilizing slow-oxidizing agents that maintain structural integrity while effectively dispersing pigment clusters in resistant Asian hair types.</p>
+                </div>
+                <div class="mt-8 pt-8 border-t border-zinc-100 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <span class="text-[10px] font-mono uppercase">Clinical Data</span>
+                  <div class="h-[1px] w-12 bg-black"></div>
+                </div>
+              </div>
+
+              <div class="bg-white p-12 hover:bg-zinc-50 transition-colors duration-500 group min-h-[400px] flex flex-col justify-between">
+                <div>
+                  <span class="block text-6xl font-light text-zinc-200 mb-8 group-hover:text-zinc-900 transition-colors duration-500 font-serif">03</span>
+                  <h3 class="text-xl font-medium mb-4 uppercase tracking-wide">Liquid Hair Restoration</h3>
+                  <p class="text-zinc-500 leading-relaxed font-light text-sm">Our proprietary post-process system that replenishes lost lipids and aligns the cuticle for a glass-like, hydrophobic finish.</p>
+                </div>
+                <div class="mt-8 pt-8 border-t border-zinc-100 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <span class="text-[10px] font-mono uppercase">Clinical Data</span>
+                  <div class="h-[1px] w-12 bg-black"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-32 w-full h-[400px] bg-zinc-900 relative overflow-hidden flex items-center justify-center">
+              <img src="https://picsum.photos/seed/chemistry/1600/600" alt="Chemical Reaction" class="absolute inset-0 w-full h-full object-cover opacity-40 grayscale mix-blend-overlay" referrerpolicy="no-referrer" />
+              <div class="z-10 text-center text-white px-4">
+                <p class="font-mono text-xs uppercase tracking-[0.3em] mb-4">The Standard of Purity</p>
+                <p class="font-serif text-3xl md:text-4xl italic max-w-2xl mx-auto leading-snug">"Precision is not an option; it is the only variable we control."</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Seminars -->
+        <section id="seminars" class="py-32 bg-kromah-stone border-b border-zinc-200">
+          <div class="max-w-[1400px] mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+              <div class="lg:col-span-4 lg:sticky lg:top-32 h-fit">
+                <h2 class="text-4xl font-serif mb-6">Seminars & <br/><span class="italic text-zinc-500">Education</span></h2>
+                <p class="text-zinc-600 mb-8 font-light leading-relaxed">
+                  Advanced seminar experiences designed for stylists, educators, and brands seeking deeper mastery of dark resistant hair color systems, controlled lift, and high-integrity transformation.
+                </p>
+                <button class="inline-flex items-center justify-center px-8 py-3 text-sm font-medium tracking-widest uppercase transition-all duration-300 ease-out focus:outline-none bg-transparent text-kromah-black border border-kromah-black hover:bg-kromah-black hover:text-white">Request Deck</button>
+              </div>
+
+              <div class="lg:col-span-8 flex flex-col gap-12">
+                <div class="group border-t border-zinc-300 pt-12 pb-4 transition-all hover:pl-4">
+                  <div class="flex flex-col md:flex-row md:items-baseline gap-4 mb-4">
+                    <h3 class="text-2xl font-medium">Advanced Education</h3>
+                    <div class="flex gap-2 flex-wrap">
+                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Certification</span>
+                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Workshops</span>
+                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Digital Library</span>
+                    </div>
+                  </div>
+                  <p class="text-zinc-600 font-light max-w-2xl leading-relaxed">Mastery certification for elite stylists focusing on the Liquid Hair Methodology. Move beyond watch-and-learn into deep chemical comprehension and controlled execution.</p>
+                </div>
+
+                <div class="group border-t border-zinc-300 pt-12 pb-4 transition-all hover:pl-4">
+                  <div class="flex flex-col md:flex-row md:items-baseline gap-4 mb-4">
+                    <h3 class="text-2xl font-medium">Brand Seminars</h3>
+                    <div class="flex gap-2 flex-wrap">
+                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Launch Support</span>
+                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Technical Education</span>
+                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Market Adaptation</span>
+                    </div>
+                  </div>
+                  <p class="text-zinc-600 font-light max-w-2xl leading-relaxed">Seminar frameworks built for professional brands that need clearer education around color systems, resistant fiber behavior, and cleaner communication between science and salon reality.</p>
+                </div>
+
+                <div class="group border-t border-zinc-300 pt-12 pb-4 transition-all hover:pl-4">
+                  <div class="flex flex-col md:flex-row md:items-baseline gap-4 mb-4">
+                    <h3 class="text-2xl font-medium">Consulting Intensives</h3>
+                    <div class="flex gap-2 flex-wrap">
+                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Protocol Design</span>
+                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Team Training</span>
+                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Systems Review</span>
+                    </div>
+                  </div>
+                  <p class="text-zinc-600 font-light max-w-2xl leading-relaxed">High-level sessions for salons, educators, and technical teams that want to upgrade their results, language, and confidence around dark resistant hair services.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CONTENT SECTIONS END -->
+      </div>
+    </main>
+
+    <footer id="contact" class="bg-kromah-black text-white py-24">
+      <div class="max-w-[1400px] mx-auto px-6 md:px-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+          <div class="col-span-1 lg:col-span-2">
+            <div class="flex items-center gap-2 mb-6">
+              <div class="w-3 h-3 bg-white rotate-45"></div>
+              <span class="text-xl tracking-[0.2em] font-bold uppercase font-sans">Kromah Lab</span>
+            </div>
+            <p class="text-zinc-400 font-light max-w-sm leading-relaxed">
+              Engineering the future of professional hair color for the global majority. Science-backed, integrity-first, innovation-driven.
+            </p>
+          </div>
+
+          <div>
+            <h4 class="text-xs font-mono uppercase tracking-widest text-zinc-500 mb-6">Inquiries</h4>
+            <ul class="space-y-4 text-sm font-light text-zinc-300">
+              <li><a href="#" class="hover:text-white transition-colors">Education Support</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Consulting Requests</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Press & Media</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-xs font-mono uppercase tracking-widest text-zinc-500 mb-6">Connect</h4>
+            <div class="flex gap-4">
+              <a href="#" class="w-10 h-10 border border-zinc-800 flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+              </a>
+              <a href="#" class="w-10 h-10 border border-zinc-800 flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+              </a>
+              <a href="#" class="w-10 h-10 border border-zinc-800 flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-zinc-600 font-mono">
+          <p>© 2024 Kromah Lab. All rights reserved.</p>
+          <div class="flex gap-8 mt-4 md:mt-0">
+            <a href="#" class="hover:text-zinc-400">Privacy Policy</a>
+            <a href="#" class="hover:text-zinc-400">Terms of Service</a>
           </div>
         </div>
       </div>
-      <div class="p-4 bg-white border-t border-zinc-100">
-        <div class="flex gap-2">
-          <input type="text" id="ai-input" placeholder="Ask about high-melanin formulation or chemistry..." class="flex-1 bg-zinc-50 border border-zinc-200 p-3 text-sm focus:outline-none focus:border-zinc-400 transition-colors font-light placeholder:text-zinc-400" onkeydown="if(event.key === 'Enter') handleSend()" />
-          <button onclick="handleSend()" class="px-4 bg-kromah-black text-white hover:bg-zinc-800 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-          </button>
-        </div>
-      </div>
-    </div>
+    </footer>
   </div>
 
   <script>
-    // Scroll handling for header
+    // Header styling on scroll
     window.addEventListener('scroll', () => {
       const header = document.getElementById('header');
       if (window.scrollY > 50) {
@@ -417,14 +455,14 @@
       }
     });
 
-    // Mobile menu toggle
+    // Mobile menu
     let mobileMenuOpen = false;
     function toggleMobileMenu() {
       mobileMenuOpen = !mobileMenuOpen;
       const menu = document.getElementById('mobile-menu');
       const menuIcon = document.getElementById('menu-icon');
       const closeIcon = document.getElementById('close-icon');
-      
+
       if (mobileMenuOpen) {
         menu.classList.remove('translate-x-full');
         menu.classList.add('translate-x-0');
@@ -445,128 +483,84 @@
         element.scrollIntoView({ behavior: 'smooth' });
       }
     }
-
-    // AI Modal
-    function openAIModal() {
-      const modal = document.getElementById('ai-modal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }
-
-    function closeAIModal() {
-      const modal = document.getElementById('ai-modal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-    }
-
-    function handleSend() {
-      const input = document.getElementById('ai-input');
-      const text = input.value.trim();
-      if (!text) return;
-      
-      const chatArea = document.getElementById('chat-area');
-      
-      // Add user message
-      const userMsg = document.createElement('div');
-      userMsg.className = 'flex justify-end mt-6';
-      userMsg.innerHTML = \`
-        <div class="max-w-[80%] p-4 rounded-sm text-sm leading-relaxed bg-zinc-900 text-white">
-          <div>\${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
-        </div>
-      \`;
-      chatArea.appendChild(userMsg);
-      input.value = '';
-      
-      // Scroll to bottom
-      chatArea.scrollTop = chatArea.scrollHeight;
-      
-      // Mock response
-      setTimeout(() => {
-        const botMsg = document.createElement('div');
-        botMsg.className = 'flex justify-start mt-6';
-        botMsg.innerHTML = \`
-          <div class="max-w-[80%] p-4 rounded-sm text-sm leading-relaxed bg-white border border-zinc-200 text-zinc-700 shadow-sm">
-            <p class="mb-2 text-[10px] font-mono uppercase text-zinc-400">Kromah Scientist</p>
-            <div>This is a static HTML version of the site. The AI functionality requires a backend or API key to process your request.</div>
-          </div>
-        \`;
-        chatArea.appendChild(botMsg);
-        chatArea.scrollTop = chatArea.scrollHeight;
-      }, 1000);
-    }
   </script>
 
-<script>
-const frameCount = 293;
-const canvas = document.getElementById("scroll-canvas");
-const context = canvas.getContext("2d");
+  <script>
+    const frameCount = 293;
+    const canvas = document.getElementById("scroll-canvas");
+    const context = canvas.getContext("2d");
 
-const currentFrame = (index) =>
-  `frames/ezgif-frame-${String(index).padStart(3, '0')}.jpg`;
+    const currentFrame = (index) =>
+      `frames/ezgif-frame-${String(index).padStart(3, '0')}.jpg`;
 
-const images = [];
-const image = new Image();
+    const images = [];
+    const image = new Image();
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+    const introSection = document.getElementById("intro");
+    const panels = [
+      document.getElementById("panel-1"),
+      document.getElementById("panel-2"),
+      document.getElementById("panel-3"),
+      document.getElementById("panel-4")
+    ];
 
-for (let i = 1; i <= frameCount; i++) {
-  const img = new Image();
-  img.src = currentFrame(i);
-  images.push(img);
-}
-
-image.src = currentFrame(1);
-image.onload = function () {
-  context.drawImage(image, 0, 0, canvas.width, canvas.height);
-};
-
-window.addEventListener("scroll", () => {
-  const scrollTop = document.documentElement.scrollTop;
-  const maxScrollTop =
-    document.documentElement.scrollHeight - window.innerHeight;
-
-  const frameIndex = Math.min(
-    frameCount - 1,
-    Math.floor((scrollTop / maxScrollTop) * frameCount)
-  );
-
-  requestAnimationFrame(() => {
-    context.drawImage(images[frameIndex], 0, 0, canvas.width, canvas.height);
-  });
-});
-</script>
-<script>
-const panels = [
-  document.getElementById("panel-1"),
-  document.getElementById("panel-2"),
-  document.getElementById("panel-3"),
-  document.getElementById("panel-4")
-];
-
-window.addEventListener("scroll", () => {
-  const scrollTop = document.documentElement.scrollTop;
-  const maxScrollTop =
-    document.documentElement.scrollHeight - window.innerHeight;
-
-  const progress = scrollTop / maxScrollTop;
-
-  // Split scroll into 4 sections
-  let index = 0;
-
-  if (progress < 0.25) index = 0;
-  else if (progress < 0.5) index = 1;
-  else if (progress < 0.75) index = 2;
-  else index = 3;
-
-  panels.forEach((panel, i) => {
-    if (i === index) {
-      panel.classList.add("active");
-    } else {
-      panel.classList.remove("active");
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     }
-  });
-});
-</script>
+
+    resizeCanvas();
+
+    for (let i = 1; i <= frameCount; i++) {
+      const img = new Image();
+      img.src = currentFrame(i);
+      images.push(img);
+    }
+
+    image.src = currentFrame(1);
+    image.onload = function () {
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    };
+
+    function updatePanels(progress) {
+      panels.forEach(panel => panel.classList.remove("active"));
+
+      if (progress >= 0.00 && progress < 0.24) {
+        panels[0].classList.add("active");
+      } else if (progress >= 0.24 && progress < 0.49) {
+        panels[1].classList.add("active");
+      } else if (progress >= 0.49 && progress < 0.74) {
+        panels[2].classList.add("active");
+      } else if (progress >= 0.74 && progress < 0.90) {
+        panels[3].classList.add("active");
+      }
+    }
+
+    function renderScrollScene() {
+      const introHeight = introSection.offsetHeight - window.innerHeight;
+      const scrollTop = Math.max(0, Math.min(window.scrollY, introHeight));
+      const progress = introHeight > 0 ? scrollTop / introHeight : 0;
+
+      const frameIndex = Math.min(
+        frameCount - 1,
+        Math.floor(progress * frameCount)
+      );
+
+      requestAnimationFrame(() => {
+        if (images[frameIndex]) {
+          context.drawImage(images[frameIndex], 0, 0, canvas.width, canvas.height);
+        }
+        updatePanels(progress);
+      });
+    }
+
+    window.addEventListener("scroll", renderScrollScene);
+    window.addEventListener("resize", () => {
+      resizeCanvas();
+      renderScrollScene();
+    });
+
+    renderScrollScene();
+  </script>
 </body>
 </html>
