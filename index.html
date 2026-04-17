@@ -536,6 +536,37 @@ window.addEventListener("scroll", () => {
   });
 });
 </script>
+<script>
+const panels = [
+  document.getElementById("panel-1"),
+  document.getElementById("panel-2"),
+  document.getElementById("panel-3"),
+  document.getElementById("panel-4")
+];
 
+window.addEventListener("scroll", () => {
+  const scrollTop = document.documentElement.scrollTop;
+  const maxScrollTop =
+    document.documentElement.scrollHeight - window.innerHeight;
+
+  const progress = scrollTop / maxScrollTop;
+
+  // Split scroll into 4 sections
+  let index = 0;
+
+  if (progress < 0.25) index = 0;
+  else if (progress < 0.5) index = 1;
+  else if (progress < 0.75) index = 2;
+  else index = 3;
+
+  panels.forEach((panel, i) => {
+    if (i === index) {
+      panel.classList.add("active");
+    } else {
+      panel.classList.remove("active");
+    }
+  });
+});
+</script>
 </body>
 </html>
