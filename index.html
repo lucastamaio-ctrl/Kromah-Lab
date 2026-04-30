@@ -115,15 +115,17 @@
       font-weight: 400;
     }
 
-    .story-copy {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      font-size: clamp(18px, 1.4vw, 28px);
-      line-height: 1.5;
-      font-weight: 300;
-      color: rgba(18,18,18,0.72);
-      max-width: 30ch;
-    }
+    .story-microcopy {
+  margin: 18px 0 0 0;
+  padding-top: 18px;
+  border-top: 1px solid rgba(18,18,18,0.18);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  line-height: 1.6;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(18,18,18,0.58);
+}
 
     .site-shell {
       position: relative;
@@ -179,13 +181,16 @@
 
   <!-- STORY PANELS START -->
   <div class="scroll-story">
-    <div id="panel-1" class="story-panel left active">
-      <span class="story-label">Kromah Lab</span>
-      <h2 class="story-title">The Science<br><em>of Dark Fiber</em></h2>
-      <p class="story-copy">
-        Precision color methodology engineered for high-melanin, dark resistant hair.
-      </p>
-    </div>
+   <div id="panel-1" class="story-panel left active">
+  <span class="story-label">Kromah Lab — Color Systems</span>
+  <h2 class="story-title">The Science<br><em>of Dark Fiber</em></h2>
+  <p class="story-copy">
+    Precision color methodology engineered for high-melanin, resistant hair—where lift, tone, and integrity are controlled, not guessed.
+  </p>
+  <p class="story-microcopy">
+    No guesswork. No correction cycles. No compromise.
+  </p>
+</div>
 
     <div id="panel-2" class="story-panel right">
       <span class="story-label">Cuticle Architecture</span>
