@@ -151,6 +151,33 @@
       background: #F5F5F3;
     }
 
+    .image-grade {
+      filter: saturate(0.82) contrast(0.96) brightness(1.02);
+    }
+
+    .image-soft {
+      position: relative;
+      overflow: hidden;
+      background: #e9e4dc;
+    }
+
+    .image-soft::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(245,245,243,0.14), rgba(245,245,243,0.03)),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0), rgba(245,245,243,0.22));
+      pointer-events: none;
+    }
+
+    .image-soft img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
     @media (max-width: 900px) {
       .story-panel {
         width: calc(100% - 40px);
@@ -198,7 +225,6 @@
 <body class="bg-kromah-stone text-kromah-black antialiased selection:bg-kromah-black selection:text-white">
   <canvas id="scroll-canvas"></canvas>
 
-  <!-- STORY PANELS START -->
   <div class="scroll-story" aria-hidden="true">
     <div id="panel-1" class="story-panel left active">
       <span class="story-label">Kromah Lab — Color Systems</span>
@@ -244,10 +270,8 @@
       </p>
     </div>
   </div>
-  <!-- STORY PANELS END -->
 
   <div class="site-shell">
-    <!-- Header -->
     <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b bg-transparent border-transparent py-6">
       <div class="max-w-[1400px] mx-auto px-6 md:px-12 flex justify-between items-center">
         <button class="flex items-center gap-2 cursor-pointer z-50" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" aria-label="Back to top">
@@ -286,13 +310,11 @@
     </header>
 
     <main>
-      <!-- Intro animation scroll area -->
       <section id="intro" class="intro-spacer">
         <div class="intro-fade-bottom"></div>
       </section>
 
       <div class="content-surface">
-        <!-- About -->
         <section id="about" class="py-24 md:py-32 border-b border-zinc-200 scroll-mt-20">
           <div class="max-w-[1400px] mx-auto px-6 md:px-12">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -318,7 +340,70 @@
           </div>
         </section>
 
-        <!-- Methodology -->
+        <section id="applied-science" class="py-28 md:py-36 bg-kromah-stone border-b border-zinc-200">
+          <div class="max-w-[1400px] mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mb-16">
+              <div class="lg:col-span-4">
+                <p class="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500 mb-4">Applied Science</p>
+                <h2 class="text-4xl md:text-5xl font-serif leading-tight">
+                  From lab logic to salon reality.
+                </h2>
+              </div>
+
+              <div class="lg:col-span-8">
+                <p class="text-lg md:text-xl text-zinc-700 font-light leading-relaxed max-w-3xl">
+                  The Kromah Lab approach is built through real testing, product analysis, color system comparison, and education—not theory alone.
+                  These moments document the bridge between formulation, fiber behavior, and practical execution.
+                </p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5">
+              <figure class="md:col-span-5 image-soft h-[360px] md:h-[520px]">
+                <img src="assets/milbon-welcome.jpg" alt="Lucas Tamaio welcomed at Milbon for advanced technical education" class="image-grade" loading="lazy" />
+                <figcaption class="absolute left-5 bottom-5 z-10 text-white bg-black/35 backdrop-blur-sm px-4 py-3 max-w-xs">
+                  <span class="block text-[10px] font-mono uppercase tracking-widest text-white/70 mb-1">Industry Credibility</span>
+                  <span class="text-sm font-light">Advanced technical training and brand-side education exposure.</span>
+                </figcaption>
+              </figure>
+
+              <div class="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
+                <figure class="image-soft h-[300px] md:h-[250px]">
+                  <img src="assets/lab-mixing.jpg" alt="Lucas Tamaio working with formulation equipment in a cosmetic chemistry lab" class="image-grade" loading="lazy" />
+                  <figcaption class="absolute left-4 bottom-4 z-10 text-white bg-black/35 backdrop-blur-sm px-3 py-2 max-w-[240px]">
+                    <span class="block text-[10px] font-mono uppercase tracking-widest text-white/70 mb-1">Formulation Logic</span>
+                    <span class="text-xs font-light">Understanding product behavior before it reaches the chair.</span>
+                  </figcaption>
+                </figure>
+
+                <figure class="image-soft h-[300px] md:h-[250px]">
+                  <img src="assets/microscope-analysis.jpg" alt="Lucas Tamaio analyzing a sample under a microscope" class="image-grade grayscale" loading="lazy" />
+                  <figcaption class="absolute left-4 bottom-4 z-10 text-white bg-black/35 backdrop-blur-sm px-3 py-2 max-w-[240px]">
+                    <span class="block text-[10px] font-mono uppercase tracking-widest text-white/70 mb-1">Fiber Analysis</span>
+                    <span class="text-xs font-light">Reading the fiber before choosing the chemistry.</span>
+                  </figcaption>
+                </figure>
+
+                <figure class="image-soft h-[300px] md:h-[250px]">
+                  <img src="assets/color-systems.jpg" alt="Lucas Tamaio analyzing professional Asian hair color swatches and shade systems" class="image-grade grayscale" loading="lazy" />
+                  <figcaption class="absolute left-4 bottom-4 z-10 text-white bg-black/35 backdrop-blur-sm px-3 py-2 max-w-[240px]">
+                    <span class="block text-[10px] font-mono uppercase tracking-widest text-white/70 mb-1">Color Systems</span>
+                    <span class="text-xs font-light">Translating Asian frameworks into usable salon strategy.</span>
+                  </figcaption>
+                </figure>
+
+                <figure class="image-soft h-[300px] md:h-[250px]">
+                  <img src="assets/education-classroom.jpg" alt="Lucas Tamaio teaching a technical hair science presentation" class="image-grade" loading="lazy" />
+                  <figcaption class="absolute left-4 bottom-4 z-10 text-white bg-black/35 backdrop-blur-sm px-3 py-2 max-w-[240px]">
+                    <span class="block text-[10px] font-mono uppercase tracking-widest text-white/70 mb-1">Education</span>
+                    <span class="text-xs font-light">Turning technical information into teachable systems.</span>
+                  </figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section id="methodology" class="py-28 md:py-32 bg-white border-b border-zinc-200 scroll-mt-20">
           <div class="max-w-[1400px] mx-auto px-6 md:px-12">
             <div class="mb-20 md:mb-24 grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
@@ -384,7 +469,8 @@
             </div>
 
             <div class="mt-24 md:mt-32 w-full min-h-[340px] md:h-[400px] bg-zinc-900 relative overflow-hidden flex items-center justify-center">
-              <img src="https://picsum.photos/seed/chemistry/1600/600" alt="Abstract chemistry visual" class="absolute inset-0 w-full h-full object-cover opacity-40 grayscale mix-blend-overlay" referrerpolicy="no-referrer" loading="lazy" />
+              <img src="assets/microscope-analysis.jpg" alt="Fiber analysis under microscope" class="absolute inset-0 w-full h-full object-cover opacity-35 grayscale mix-blend-overlay image-grade" loading="lazy" />
+              <div class="absolute inset-0 bg-black/35"></div>
               <div class="z-10 text-center text-white px-6">
                 <p class="font-mono text-xs uppercase tracking-[0.3em] mb-4">Kromah Lab Principle</p>
                 <p class="font-serif text-3xl md:text-4xl italic max-w-2xl mx-auto leading-snug">
@@ -395,7 +481,6 @@
           </div>
         </section>
 
-        <!-- Consulting -->
         <section id="consulting" class="py-28 md:py-32 bg-kromah-stone border-b border-zinc-200 scroll-mt-20">
           <div class="max-w-[1400px] mx-auto px-6 md:px-12">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mb-20 md:mb-24">
@@ -432,35 +517,45 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-zinc-200 border border-zinc-200 mb-20 md:mb-24">
-              <article class="bg-white p-8 md:p-10 min-h-[300px]">
+              <article class="bg-white p-8 md:p-10 min-h-[300px] flex flex-col">
                 <span class="block text-xs font-mono uppercase tracking-widest text-zinc-400 mb-6">01</span>
                 <h3 class="text-xl font-medium mb-4">Product Development & Evaluation</h3>
-                <p class="text-zinc-500 font-light leading-relaxed">
+                <p class="text-zinc-500 font-light leading-relaxed mb-8">
                   Translating formulation into real-world performance through testing, fiber analysis, swatch work, model evaluation, and salon validation.
                 </p>
+                <div class="image-soft mt-auto h-40">
+                  <img src="assets/lab-mixing.jpg" alt="Product development and formulation evaluation" class="image-grade" loading="lazy" />
+                </div>
               </article>
 
-              <article class="bg-white p-8 md:p-10 min-h-[300px]">
+              <article class="bg-white p-8 md:p-10 min-h-[300px] flex flex-col">
                 <span class="block text-xs font-mono uppercase tracking-widest text-zinc-400 mb-6">02</span>
                 <h3 class="text-xl font-medium mb-4">Market Adaptation</h3>
                 <p class="text-zinc-500 font-light leading-relaxed mb-5">
                   Adapting high-performance color systems across regions by aligning formulation logic, color behavior, cultural expectations, and salon habits.
                 </p>
 
-                <ul class="space-y-2 text-sm text-zinc-500 font-light leading-relaxed">
+                <ul class="space-y-2 text-sm text-zinc-500 font-light leading-relaxed mb-8">
                   <li>Extended level systems, including 20-level frameworks</li>
                   <li>No-brown-base tonality and neutralization logic</li>
                   <li>CYM vs traditional YRB color foundations</li>
                   <li>Melanin density, lift behavior, and resistant fiber response</li>
                 </ul>
+
+                <div class="image-soft mt-auto h-40">
+                  <img src="assets/color-systems.jpg" alt="Asian color system adaptation and shade analysis" class="image-grade grayscale" loading="lazy" />
+                </div>
               </article>
 
-              <article class="bg-white p-8 md:p-10 min-h-[300px]">
+              <article class="bg-white p-8 md:p-10 min-h-[300px] flex flex-col">
                 <span class="block text-xs font-mono uppercase tracking-widest text-zinc-400 mb-6">03</span>
                 <h3 class="text-xl font-medium mb-4">Education Strategy</h3>
-                <p class="text-zinc-500 font-light leading-relaxed">
+                <p class="text-zinc-500 font-light leading-relaxed mb-8">
                   Building technical education that helps stylists understand the product, use it correctly, and create consistent results behind the chair.
                 </p>
+                <div class="image-soft mt-auto h-40">
+                  <img src="assets/education-classroom.jpg" alt="Technical education strategy and classroom teaching" class="image-grade" loading="lazy" />
+                </div>
               </article>
 
               <article class="bg-white p-8 md:p-10 min-h-[300px]">
@@ -519,12 +614,12 @@
           </div>
         </section>
 
-        <!-- Seminars -->
         <section id="seminars" class="py-28 md:py-32 bg-kromah-stone border-b border-zinc-200 scroll-mt-20">
           <div class="max-w-[1400px] mx-auto px-6 md:px-12">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mb-20">
               <div class="lg:col-span-4 lg:sticky lg:top-32 h-fit">
-                <h2 class="text-4xl font-serif mb-6">
+                <p class="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500 mb-4">Education</p>
+                <h2 class="text-4xl md:text-5xl font-serif mb-6">
                   Seminars & <br />
                   <span class="italic text-zinc-500">Education</span>
                 </h2>
@@ -538,51 +633,81 @@
                 </button>
               </div>
 
-              <div class="lg:col-span-8 flex flex-col gap-12">
-                <article class="group border-t border-zinc-300 pt-12 pb-4 transition-all hover:pl-4">
-                  <div class="flex flex-col md:flex-row md:items-baseline gap-4 mb-4">
-                    <h3 class="text-2xl font-medium">Advanced Education</h3>
-                    <div class="flex gap-2 flex-wrap">
-                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Certification</span>
-                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Workshops</span>
-                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Digital Library</span>
-                    </div>
+              <div class="lg:col-span-8">
+                <div class="image-soft h-[360px] md:h-[460px] mb-12">
+                  <img src="assets/education-classroom.jpg" alt="Lucas Tamaio teaching a science-driven hair education seminar" class="image-grade" loading="lazy" />
+                </div>
+
+                <p class="text-lg text-zinc-600 font-light max-w-2xl leading-relaxed mb-10">
+                  Learn how to confidently lift, tone, and refine dark, resistant hair into luminous, trend-driven results—without relying on correction cycles or compromising the fiber.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-14">
+                  <div>
+                    <h3 class="text-xl font-medium mb-4">What You’ll Master</h3>
+                    <ul class="space-y-3 text-zinc-600 font-light">
+                      <li>Controlled lift on dark, resistant hair without unnecessary damage</li>
+                      <li>Creating true ash, milk tea, and neutral tones without green or mud</li>
+                      <li>Understanding melanin behavior and pigment dispersion</li>
+                      <li>Applying the 20-level system beyond Western limitations</li>
+                      <li>Building predictable, repeatable color outcomes</li>
+                    </ul>
                   </div>
 
-                  <p class="text-zinc-600 font-light max-w-2xl leading-relaxed">
-                    A certification-based experience for elite stylists focused on the Liquid Hair Methodology—combining chemical understanding with controlled execution.
-                  </p>
-                </article>
-
-                <article class="group border-t border-zinc-300 pt-12 pb-4 transition-all hover:pl-4">
-                  <div class="flex flex-col md:flex-row md:items-baseline gap-4 mb-4">
-                    <h3 class="text-2xl font-medium">Brand Seminars</h3>
-                    <div class="flex gap-2 flex-wrap">
-                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Launch Support</span>
-                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Technical Education</span>
-                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Market Adaptation</span>
-                    </div>
+                  <div class="border border-zinc-200 p-8 bg-white/50">
+                    <p class="text-xs font-mono uppercase tracking-[0.25em] text-zinc-400 mb-4">Cultural Relevance</p>
+                    <p class="text-zinc-600 font-light leading-relaxed">
+                      Today’s global demand is shaped by Asian beauty standards—tones like milk tea, greige, smoky mauve, and ash beige require a different understanding of color, lift, and pigment behavior.
+                    </p>
                   </div>
+                </div>
 
-                  <p class="text-zinc-600 font-light max-w-2xl leading-relaxed">
-                    Custom frameworks for professional brands seeking clarity in color systems, resistant fiber behavior, and education that translates into real salon results.
-                  </p>
-                </article>
-
-                <article class="group border-t border-zinc-300 pt-12 pb-4 transition-all hover:pl-4">
-                  <div class="flex flex-col md:flex-row md:items-baseline gap-4 mb-4">
-                    <h3 class="text-2xl font-medium">Consulting Intensives</h3>
-                    <div class="flex gap-2 flex-wrap">
-                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Protocol Design</span>
-                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Team Training</span>
-                      <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Systems Review</span>
+                <div class="flex flex-col gap-12">
+                  <article class="group border-t border-zinc-300 pt-12 pb-4 transition-all hover:pl-4">
+                    <div class="flex flex-col md:flex-row md:items-baseline gap-4 mb-4">
+                      <h3 class="text-2xl font-medium">Technical Seminar</h3>
+                      <div class="flex gap-2 flex-wrap">
+                        <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">3 Hours</span>
+                        <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Theory</span>
+                        <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Formulation Q&A</span>
+                      </div>
                     </div>
-                  </div>
 
-                  <p class="text-zinc-600 font-light max-w-2xl leading-relaxed">
-                    High-level sessions for teams looking to refine protocols, elevate technical language, and improve consistency across dark, resistant hair services.
-                  </p>
-                </article>
+                    <p class="text-zinc-600 font-light max-w-2xl leading-relaxed">
+                      Two hours of technical education using swatches, formulas, and visual breakdowns, followed by one hour of interactive Q&A focused on formulation challenges.
+                    </p>
+                  </article>
+
+                  <article class="group border-t border-zinc-300 pt-12 pb-4 transition-all hover:pl-4">
+                    <div class="flex flex-col md:flex-row md:items-baseline gap-4 mb-4">
+                      <h3 class="text-2xl font-medium">Practical Workshop</h3>
+                      <div class="flex gap-2 flex-wrap">
+                        <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">6 Hours</span>
+                        <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Live Model</span>
+                        <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Work-and-Talk</span>
+                      </div>
+                    </div>
+
+                    <p class="text-zinc-600 font-light max-w-2xl leading-relaxed">
+                      One hour of technical foundation followed by five hours of real-time technique performance with a live model, guided troubleshooting, and formulation discussion throughout the session.
+                    </p>
+                  </article>
+
+                  <article class="group border-t border-zinc-300 pt-12 pb-4 transition-all hover:pl-4">
+                    <div class="flex flex-col md:flex-row md:items-baseline gap-4 mb-4">
+                      <h3 class="text-2xl font-medium">Customizable Format</h3>
+                      <div class="flex gap-2 flex-wrap">
+                        <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Salon Teams</span>
+                        <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Academies</span>
+                        <span class="text-[10px] uppercase border border-zinc-300 px-2 py-1 rounded-full text-zinc-500 font-mono">Brand Partners</span>
+                      </div>
+                    </div>
+
+                    <p class="text-zinc-600 font-light max-w-2xl leading-relaxed">
+                      A tailored experience designed around the client’s needs, combining technical education, hands-on execution, consultation strategy, or business-building modules.
+                    </p>
+                  </article>
+                </div>
               </div>
             </div>
           </div>
@@ -611,9 +736,9 @@
           <div>
             <h4 class="text-xs font-mono uppercase tracking-widest text-zinc-500 mb-6">Inquiries</h4>
             <ul class="space-y-4 text-sm font-light text-zinc-300">
-              <li><a href="#" class="hover:text-white transition-colors">Education Support</a></li>
-              <li><a href="#" class="hover:text-white transition-colors">Consulting Requests</a></li>
-              <li><a href="#" class="hover:text-white transition-colors">Press & Media</a></li>
+              <li><a href="mailto:hello@kromahlab.com?subject=Education%20Support" class="hover:text-white transition-colors">Education Support</a></li>
+              <li><a href="mailto:hello@kromahlab.com?subject=Consulting%20Request" class="hover:text-white transition-colors">Consulting Requests</a></li>
+              <li><a href="mailto:hello@kromahlab.com?subject=Press%20and%20Media" class="hover:text-white transition-colors">Press & Media</a></li>
             </ul>
           </div>
 
@@ -621,26 +746,15 @@
             <h4 class="text-xs font-mono uppercase tracking-widest text-zinc-500 mb-6">Connect</h4>
             <div class="flex gap-4">
               <a href="#" aria-label="Instagram" class="w-10 h-10 border border-zinc-800 flex items-center justify-center hover:bg-white hover:text-black transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                  <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
-                </svg>
+                IG
               </a>
 
               <a href="#" aria-label="LinkedIn" class="w-10 h-10 border border-zinc-800 flex items-center justify-center hover:bg-white hover:text-black transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                  <rect width="4" height="12" x="2" y="9"></rect>
-                  <circle cx="4" cy="4" r="2"></circle>
-                </svg>
+                IN
               </a>
 
               <a href="mailto:hello@kromahlab.com" aria-label="Email Kromah Lab" class="w-10 h-10 border border-zinc-800 flex items-center justify-center hover:bg-white hover:text-black transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-                </svg>
+                @
               </a>
             </div>
           </div>
