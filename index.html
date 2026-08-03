@@ -42,16 +42,42 @@
     ::-webkit-scrollbar-thumb { background: #D4D4D4; }
     ::-webkit-scrollbar-thumb:hover { background: #8E8E8E; }
 
-    #scroll-canvas {
+    #scroll-media {
       position: fixed;
       inset: 0;
       width: 100%;
       height: 100%;
       z-index: 1;
-      display: block;
       pointer-events: none;
       background: #F5F5F3;
+      overflow: hidden;
     }
+
+    #hero-poster,
+    #scroll-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    #hero-poster {
+      opacity: 1;
+      transition: opacity 0.35s ease;
+    }
+
+    #scroll-video {
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    #scroll-media.video-ready #hero-poster { opacity: 0; }
+    #scroll-media.video-ready #scroll-video { opacity: 1; }
+
+    html.hero-static .intro-spacer { height: 100vh; }
+    html.hero-static .story-panel:not(#panel-1) { display: none; }
 
     .scroll-story {
       position: fixed;
@@ -211,6 +237,9 @@
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
+      .intro-spacer { height: 100vh; }
+      #scroll-video { display: none; }
+      .story-panel:not(#panel-1) { display: none; }
       .story-panel,
       .transition-all,
       .transition-colors,
@@ -223,10 +252,27 @@
 </head>
 
 <body class="bg-kromah-stone text-kromah-black antialiased selection:bg-kromah-black selection:text-white">
-  <canvas id="scroll-canvas"></canvas>
+  <div id="scroll-media" aria-hidden="true">
+    <img
+      id="hero-poster"
+      src="assets/hero/hero-poster.webp"
+      alt=""
+      width="1920"
+      height="1080"
+      fetchpriority="high"
+    />
+    <video
+      id="scroll-video"
+      muted
+      playsinline
+      preload="auto"
+      poster="assets/hero/hero-poster.webp"
+      data-src="assets/hero/hero-scroll.mp4"
+    ></video>
+  </div>
 
-  <div class="scroll-story" aria-hidden="true">
-    <div id="panel-1" class="story-panel left active">
+  <div class="scroll-story" aria-label="Kromah Lab color science introduction">
+    <div id="panel-1" class="story-panel left active" aria-hidden="false">
       <span class="story-label">Kromah Lab — Color Systems</span>
       <h2 class="story-title">The Science<br><em>of Dark Fiber</em></h2>
       <p class="story-copy">
@@ -237,7 +283,7 @@
       </p>
     </div>
 
-    <div id="panel-2" class="story-panel right">
+    <div id="panel-2" class="story-panel right" aria-hidden="true">
       <span class="story-label">Cuticle Architecture</span>
       <h2 class="story-title">Surface<br><em>Intelligence</em></h2>
       <p class="story-copy">
@@ -248,7 +294,7 @@
       </p>
     </div>
 
-    <div id="panel-3" class="story-panel left">
+    <div id="panel-3" class="story-panel left" aria-hidden="true">
       <span class="story-label">Cortex & Melanin</span>
       <h2 class="story-title">The Core of<br><em>Transformation</em></h2>
       <p class="story-copy">
@@ -259,7 +305,7 @@
       </p>
     </div>
 
-    <div id="panel-4" class="story-panel right">
+    <div id="panel-4" class="story-panel right" aria-hidden="true">
       <span class="story-label">Keratin Structure</span>
       <h2 class="story-title">Molecular<br><em>Precision</em></h2>
       <p class="story-copy">
@@ -827,11 +873,11 @@
   </script>
 
   <script>
-    const frameCount = 293;
-    const canvas = document.getElementById("scroll-canvas");
-    const context = canvas.getContext("2d");
+    const scrollMedia = document.getElementById("scroll-media");
+    const scrollVideo = document.getElementById("scroll-video");
     const introSection = document.getElementById("intro");
-
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const saveData = Boolean(navigator.connection && navigator.connection.saveData);
     const panels = [
       document.getElementById("panel-1"),
       document.getElementById("panel-2"),
@@ -839,76 +885,22 @@
       document.getElementById("panel-4")
     ];
 
-    const currentFrame = (index) =>
-      `frames/ezgif-frame-${String(index).padStart(3, '0')}.jpg`;
-
-    const images = [];
-    let lastFrameIndex = -1;
     let scrollSceneTicking = false;
 
-    function resizeCanvas() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.floor(window.innerWidth * dpr);
-      canvas.height = Math.floor(window.innerHeight * dpr);
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
-      context.setTransform(dpr, 0, 0, dpr, 0, 0);
-      drawFrame(Math.max(lastFrameIndex, 0));
-    }
-
-    function drawFrame(frameIndex) {
-      const img = images[frameIndex];
-      if (!img || !img.complete) return;
-
-      const canvasWidth = window.innerWidth;
-      const canvasHeight = window.innerHeight;
-      const imgRatio = img.width / img.height;
-      const canvasRatio = canvasWidth / canvasHeight;
-
-      let drawWidth, drawHeight, offsetX, offsetY;
-
-      if (imgRatio > canvasRatio) {
-        drawHeight = canvasHeight;
-        drawWidth = drawHeight * imgRatio;
-        offsetX = (canvasWidth - drawWidth) / 2;
-        offsetY = 0;
-      } else {
-        drawWidth = canvasWidth;
-        drawHeight = drawWidth / imgRatio;
-        offsetX = 0;
-        offsetY = (canvasHeight - drawHeight) / 2;
-      }
-
-      context.clearRect(0, 0, canvasWidth, canvasHeight);
-      context.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-    }
-
-    function preloadFrames() {
-      for (let i = 1; i <= frameCount; i++) {
-        const img = new Image();
-        img.src = currentFrame(i);
-        images.push(img);
-      }
-
-      images[0].onload = () => {
-        lastFrameIndex = 0;
-        resizeCanvas();
-        drawFrame(0);
-      };
+    function setActivePanel(activeIndex) {
+      panels.forEach((panel, index) => {
+        const isActive = index === activeIndex;
+        panel.classList.toggle("active", isActive);
+        panel.setAttribute("aria-hidden", String(!isActive));
+      });
     }
 
     function updatePanels(progress) {
-      panels.forEach(panel => panel.classList.remove("active"));
-
-      if (progress >= 0.00 && progress < 0.24) {
-        panels[0].classList.add("active");
-      } else if (progress >= 0.24 && progress < 0.49) {
-        panels[1].classList.add("active");
-      } else if (progress >= 0.49 && progress < 0.74) {
-        panels[2].classList.add("active");
-      } else if (progress >= 0.74 && progress < 0.90) {
-        panels[3].classList.add("active");
-      }
+      if (progress < 0.24) setActivePanel(0);
+      else if (progress < 0.49) setActivePanel(1);
+      else if (progress < 0.74) setActivePanel(2);
+      else if (progress < 0.90) setActivePanel(3);
+      else setActivePanel(-1);
     }
 
     function renderScrollScene() {
@@ -916,33 +908,48 @@
       const scrollTop = Math.max(0, Math.min(window.scrollY, introHeight));
       const progress = introHeight > 0 ? scrollTop / introHeight : 0;
 
-      const frameIndex = Math.min(
-        frameCount - 1,
-        Math.floor(progress * frameCount)
-      );
-
-      if (frameIndex !== lastFrameIndex) {
-        drawFrame(frameIndex);
-        lastFrameIndex = frameIndex;
+      updatePanels(progress);
+      if (Number.isFinite(scrollVideo.duration) && scrollVideo.readyState >= 2) {
+        const targetTime = progress * Math.max(0, scrollVideo.duration - 0.04);
+        if (Math.abs(scrollVideo.currentTime - targetTime) > 0.01) {
+          scrollVideo.currentTime = targetTime;
+        }
       }
 
-      updatePanels(progress);
       scrollSceneTicking = false;
+    }
+
+    function enableScrollVideo() {
+      if (reducedMotion || saveData) {
+        document.documentElement.classList.add("hero-static");
+        setActivePanel(0);
+        return;
+      }
+
+      scrollVideo.src = scrollVideo.dataset.src;
+
+      scrollVideo.addEventListener("loadeddata", () => {
+        scrollMedia.classList.add("video-ready");
+        renderScrollScene();
+      }, { once: true });
+
+      scrollVideo.addEventListener("error", () => {
+        document.documentElement.classList.add("hero-static");
+      }, { once: true });
+
+      scrollVideo.load();
     }
 
     window.addEventListener("scroll", () => {
       if (!scrollSceneTicking) {
-        window.requestAnimationFrame(renderScrollScene);
         scrollSceneTicking = true;
+        window.requestAnimationFrame(renderScrollScene);
       }
     }, { passive: true });
 
-    window.addEventListener("resize", () => {
-      resizeCanvas();
-      renderScrollScene();
-    });
+    window.addEventListener("resize", renderScrollScene);
 
-    preloadFrames();
+    enableScrollVideo();
     renderScrollScene();
   </script>
 </body>
