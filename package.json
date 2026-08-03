@@ -3,6 +3,6 @@
   "private": true,
   "scripts": {
     "dev": "npx -y serve@latest -l 3000 .",
-    "build": "mkdir -p dist && cp -r index.html dist/"
+    "build": "rm -rf dist && mkdir -p dist && cp index.html CNAME metadata.json dist/ && cp -R assets dist/"
   }
 }
